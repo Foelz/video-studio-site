@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="no-referrer">
+<title>Video Studio · Login da Meta</title>
+<link rel="stylesheet" href="estilo.css">
+</head>
+<body>
+<main>
+<h1>Video Studio</h1>
+<p id="msg">Voltando para o Video Studio no seu computador…</p>
+<p><a id="link" href="http://localhost:3213/meta/">Continuar</a></p>
+</main>
+<script>
+// Retorno do login da Meta (que exige HTTPS no redirect). Esta página não guarda nada:
+// só repassa code, state e erro para o Video Studio que está esperando em localhost:3213.
+(function () {
+	var entrada = new URLSearchParams(location.search);
+	var saida = new URLSearchParams();
+	['code', 'state', 'error', 'error_reason', 'error_description'].forEach(function (k) {
+		var v = entrada.get(k);
+		if (v) saida.set(k, v);
+	});
+	var destino = 'http://localhost:3213/meta/?' + saida.toString();
+	history.replaceState(null, '', location.pathname);
+	document.getElementById('link').href = destino;
+	location.replace(destino);
+})();
+</script>
+</body>
+</html>
